@@ -1,0 +1,6 @@
+#include "campuscompute.h"
+#include <stdio.h>
+#define P 5
+#define R 3
+int run_banker(int safe_case){int alloc[P][R]={{0,1,0},{2,0,0},{3,0,2},{2,1,1},{0,0,2}};int max[P][R]={{7,5,3},{3,2,2},{9,0,2},{2,2,2},{4,3,3}};int avail[R];if(safe_case){int a[]={3,3,2};for(int j=0;j<R;j++)avail[j]=a[j];}else{int a[]={0,0,0};for(int j=0;j<R;j++)avail[j]=a[j];}
+ int need[P][R],finish[P]={0},seq[P],count=0;for(int i=0;i<P;i++)for(int j=0;j<R;j++)need[i][j]=max[i][j]-alloc[i][j];puts("Need matrix (Maximum - Allocation):");for(int i=0;i<P;i++){printf("P%d: ",i);for(int j=0;j<R;j++)printf("%d ",need[i][j]);puts("");}printf("Available: %d %d %d\n",avail[0],avail[1],avail[2]);while(count<P){int progress=0;for(int i=0;i<P;i++)if(!finish[i]){int ok=1;for(int j=0;j<R;j++)if(need[i][j]>avail[j])ok=0;if(ok){for(int j=0;j<R;j++)avail[j]+=alloc[i][j];finish[i]=1;seq[count++]=i;progress=1;}}if(!progress)break;}if(count==P){printf("SAFE state. Safe sequence: ");for(int i=0;i<P;i++)printf("P%d%s",seq[i],i==P-1?"\n":" -> ");}else{printf("UNSAFE state: no safe sequence exists for all processes. Unable to finish: ");for(int i=0;i<P;i++)if(!finish[i])printf("P%d ",i);puts("");}return safe_case?(count==P?0:1):(count<P?0:1);}
